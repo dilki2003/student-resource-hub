@@ -158,10 +158,10 @@
 
     .hero h1 {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 2.6rem);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
       font-weight: 800;
-      line-height: 1.08;
-      letter-spacing: -2px;
+      line-height: 1.2;
+      letter-spacing: -1px;
       margin-bottom: 1.5rem;
       color: var(--text);
     }
@@ -288,7 +288,7 @@
       font-family: 'Syne', sans-serif;
       font-size: 1.15rem;
       font-weight: 700;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.3px;
     }
     .section-link {
       font-size: 0.85rem;
@@ -507,14 +507,14 @@
     <li><a href="#">About</a></li>
   </ul>
   <div class="nav-btns">
-    <button class="btn-ghost" onclick="window.location='login.php'">Log in</button>
-    <button class="btn-primary" onclick="window.location='register.php'">Sign up</button>
+    <button class="btn-ghost" onclick="window.location='pages/login.php'">Log in</button>
+    <button class="btn-primary" onclick="window.location='pages/register.php'">Sign up</button>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge fade-in">University of Moratuwa — IT Faculty</div>
+  <div class="hero-badge fade-in">University of Colombo — IT Faculty</div>
   <h1 class="fade-in">
     Find notes.<br>
     Share knowledge.<br>
@@ -524,8 +524,8 @@
     Resource Hub is your student-built library of lecture notes, past papers, and study resources — all in one place, free forever.
   </p>
   <div class="hero-cta fade-in">
-    <button class="btn-primary btn-large" onclick="window.location='register.php'">Get started free</button>
-    <button class="btn-ghost btn-large" onclick="window.location='browse.php'">Browse resources</button>
+    <button class="btn-primary btn-large" onclick="window.location='pages/register.php'">Get started free</button>
+    <button class="btn-ghost btn-large" onclick="window.location='pages/browse.php'">Browse resources</button>
   </div>
 </section>
 
@@ -702,7 +702,7 @@
 </section>
 
 <!-- UPLOAD CTA -->
-<div class="upload-cta" onclick="window.location='upload.php'">
+<div class="upload-cta" onclick="window.location='pages/upload.php'">
   <div class="upload-icon">📤</div>
   <h3>Share your notes with 380+ students</h3>
   <p>Upload your lecture notes, past papers or study guides — help your batchmates and earn ratings.</p>
@@ -712,7 +712,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>Resource Hub &copy; 2026 · Built by IT Students, for IT Students · University of Moratuwa</p>
+  <p>Resource Hub &copy; 2026 · Built by IT Students, for IT Students · University of Colombo</p>
 </footer>
 
 <script>
