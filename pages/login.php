@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db.php';
+require_once '../config/db.php';
 
 $error = '';
 
@@ -19,14 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id']    = $user['id'];
             $_SESSION['user_name']  = $user['name'];
             $_SESSION['user_email'] = $user['email'];
-            $_SESSION['role']       = $user['role'];
-            $_SESSION['name']       = $user['name'];
-
-            if ($user['role'] === 'admin') {
-                header('Location: admin.php');
-            } else {
-                header('Location: index.php');
-            }
+            header('Location: ../index.php');
             exit;
         } else {
             $error = 'Invalid email or password. Please try again.';
@@ -288,7 +281,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="orb orb2"></div>
 
 <nav>
-  <a href="index.php" class="logo">Resource<span>Hub</span></a>
+  <a href='../index.php' class="logo">Resource<span>Hub</span></a>
   <a href="register.php" class="nav-link">Don't have an account? Sign up →</a>
 </nav>
 
@@ -334,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </main>
 
-<footer>Resource Hub &copy; 2026 · University of Moratuwa</footer>
+<footer>Resource Hub &copy; 2026 · University of Colombo</footer>
 
 <script>
   function togglePw() {
@@ -342,7 +335,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const btn   = document.getElementById('toggleBtn');
     if (input.type === 'password') {
       input.type = 'text';
-      btn.textContent = '🙈';
+      btn.textContent = '';
     } else {
       input.type = 'password';
       btn.textContent = '👁️';

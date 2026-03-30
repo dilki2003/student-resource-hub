@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db.php';
+require_once '../config/db.php';
 
 $error = '';
 
@@ -316,7 +316,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="orb orb2"></div>
 
 <nav>
-  <a href="index.php" class="logo">Resource<span>Hub</span></a>
+  <a href='../index.php' class="logo">Resource<span>Hub</span></a>
   <a href="login.php" class="nav-link">Already have an account? Log in →</a>
 </nav>
 
@@ -398,7 +398,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </main>
 
-<footer>Resource Hub &copy; 2026 · University of Moratuwa</footer>
+<footer>Resource Hub &copy; 2026 · University of Colombo</footer>
 
 <script>
   function togglePw(inputId, btnId) {
@@ -406,7 +406,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const btn   = document.getElementById(btnId);
     if (input.type === 'password') {
       input.type = 'text';
-      btn.textContent = '🙈';
+      btn.textContent = '';
     } else {
       input.type = 'password';
       btn.textContent = '👁️';

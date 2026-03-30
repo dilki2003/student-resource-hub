@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db.php';
+require_once '../config/db.php';
 
 // --- Filters from GET ---
 $search   = trim($_GET['q']          ?? '');
@@ -13,7 +13,7 @@ $where  = ["r.status = 'active'"];
 $params = [];
 
 if ($search !== '') {
-    $where[]  = "(r.title LIKE ? OR r.subject_code LIKE ? OR r.description LIKE ?)";
+    $where[]  = "(r.title LIKE ? OR r.subject_code LIKE ? OR COALESCE(r.description,'') LIKE ?)";
     $like     = "%$search%";
     $params[] = $like;
     $params[] = $like;
@@ -29,24 +29,26 @@ if ($year_lvl > 0) {
 }
 
 $order = match($sort) {
-    'popular'  => 'r.downloads DESC',
+    'popular'  => 'downloads DESC',
     'rating'   => 'avg_rating DESC',
-    default    => 'r.created_at DESC',
+    default    => 'created_at DESC',
 };
 
 $sql = "
-    SELECT r.*,
-           u.name AS uploader_name,
-           c.name AS category_name,
-           c.icon AS category_icon,
-           ROUND(COALESCE(AVG(rt.stars), 0), 1) AS avg_rating,
-           COUNT(rt.id) AS rating_count
-    FROM resources r
-    JOIN users      u  ON r.user_id     = u.id
-    JOIN categories c  ON r.category_id = c.id
-    LEFT JOIN ratings rt ON r.id        = rt.resource_id
-    WHERE " . implode(' AND ', $where) . "
-    GROUP BY r.id
+    SELECT * FROM (
+        SELECT r.*,
+               u.name AS uploader_name,
+               c.name AS category_name,
+               c.icon AS category_icon,
+               ROUND(COALESCE(AVG(rt.stars), 0), 1) AS avg_rating,
+               COUNT(rt.id) AS rating_count
+        FROM resources r
+        JOIN users      u  ON r.user_id     = u.id
+        JOIN categories c  ON r.category_id = c.id
+        LEFT JOIN ratings rt ON r.id        = rt.resource_id
+        WHERE " . implode(' AND ', $where) . "
+        GROUP BY r.id
+    ) AS sub
     ORDER BY $order
 ";
 
@@ -365,7 +367,7 @@ $total = count($resources);
 
 <!-- NAV -->
 <nav>
-  <a href="index.php" class="logo">Resource<span>Hub</span></a>
+  <a href='../index.php' class="logo">Resource<span>Hub</span></a>
   <div class="nav-right">
     <?php if (isset($_SESSION['user_id'])): ?>
       <a href="upload.php" class="btn-accent">+ Upload</a>
@@ -543,7 +545,7 @@ $total = count($resources);
   </main>
 </div>
 
-<footer>Resource Hub &copy; 2026 · University of Moratuwa</footer>
+<footer>Resource Hub &copy; 2026 · University of Colombo</footer>
 
 </body>
 </html>

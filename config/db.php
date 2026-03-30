@@ -1,3 +1,4 @@
+
 <?php
 // ============================================
 //  Resource Hub — Database Connection (db.php)
@@ -6,8 +7,8 @@
 
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'resourcehub');
-define('DB_USER', 'root');       
-define('DB_PASS', 'Cdn2003$');         
+define('DB_USER', 'root');       // XAMPP default username
+define('DB_PASS', 'Cdn2003$');         // XAMPP default = no password (null not empty string)
 define('DB_CHARSET', 'utf8mb4');
 
 $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
