@@ -1,0 +1,99 @@
+/*
+ * Resource Hub — Shared CSS Variables & Utilities
+ * assets/css/style.css
+ * Import this in any page: <link rel="stylesheet" href="../assets/css/style.css">
+ */
+
+:root {
+  --bg:          #0a0a0f;
+  --surface:     #13131a;
+  --surface2:    #1c1c27;
+  --accent:      #7c6ff7;
+  --accent2:     #f7c26f;
+  --text:        #f0f0f8;
+  --muted:       #7a7a9a;
+  --border:      rgba(255,255,255,0.07);
+  --focus:       rgba(124,111,247,0.5);
+  --error:       #f87171;
+  --success:     #4ade80;
+  --card-radius: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Grid background */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(124,111,247,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,111,247,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none; z-index: 0;
+}
+
+/* Utility classes */
+.text-muted   { color: var(--muted); }
+.text-accent  { color: var(--accent); }
+.text-success { color: var(--success); }
+.text-error   { color: var(--error); }
+
+.surface  { background: var(--surface); }
+.surface2 { background: var(--surface2); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 1.25rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 0.6rem 1.3rem;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem; font-weight: 500;
+  cursor: pointer; text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.btn-ghost {
+  display: inline-block;
+  padding: 0.6rem 1.3rem;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--muted);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem; cursor: pointer;
+  text-decoration: none; transition: all 0.2s;
+}
+.btn-ghost:hover { color: var(--text); background: var(--surface); }
+
+.alert-error {
+  padding: 0.75rem 1rem; border-radius: 8px;
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.2);
+  color: var(--error); font-size: 0.875rem;
+}
+.alert-success {
+  padding: 0.75rem 1rem; border-radius: 8px;
+  background: rgba(74,222,128,0.1);
+  border: 1px solid rgba(74,222,128,0.2);
+  color: var(--success); font-size: 0.875rem;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.45s ease forwards; }
