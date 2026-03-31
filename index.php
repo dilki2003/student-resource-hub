@@ -1,3 +1,12 @@
+<?php
+session_start();
+require_once 'config/db.php';
+
+// Real stats from database
+$total_resources = $pdo->query("SELECT COUNT(*) FROM resources WHERE status='active'")->fetchColumn();
+$total_users     = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+$total_cats      = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +39,6 @@
       overflow-x: hidden;
     }
 
-    /* === BACKGROUND GRID === */
     body::before {
       content: '';
       position: fixed;
@@ -43,7 +51,6 @@
       z-index: 0;
     }
 
-    /* === GLOW ORBS === */
     .orb {
       position: fixed;
       border-radius: 50%;
@@ -54,7 +61,6 @@
     .orb1 { width: 500px; height: 500px; background: rgba(124,111,247,0.12); top: -100px; left: -100px; }
     .orb2 { width: 400px; height: 400px; background: rgba(247,194,111,0.07); bottom: 100px; right: -80px; }
 
-    /* === NAV === */
     nav {
       position: sticky;
       top: 0;
@@ -120,7 +126,6 @@
     }
     .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
 
-    /* === HERO === */
     .hero {
       position: relative;
       z-index: 1;
@@ -165,10 +170,6 @@
       margin-bottom: 1.5rem;
       color: var(--text);
     }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--accent);
-    }
     .hero h1 .highlight {
       position: relative;
       display: inline-block;
@@ -205,7 +206,6 @@
       font-weight: 500;
     }
 
-    /* === SEARCH BAR === */
     .search-wrap {
       position: relative;
       z-index: 1;
@@ -249,7 +249,6 @@
     }
     .search-btn:hover { opacity: 0.85; }
 
-    /* === STATS === */
     .stats {
       position: relative;
       z-index: 1;
@@ -269,7 +268,6 @@
     .stat-num span { color: var(--accent); }
     .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; letter-spacing: 0.5px; text-transform: uppercase; }
 
-    /* === CATEGORIES === */
     .section {
       position: relative;
       z-index: 1;
@@ -331,7 +329,6 @@
       border-radius: 999px;
     }
 
-    /* === RESOURCE CARDS === */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -368,10 +365,11 @@
       justify-content: center;
       font-size: 1.2rem;
     }
-    .fi-pdf { background: rgba(239,68,68,0.15); }
-    .fi-doc { background: rgba(59,130,246,0.15); }
-    .fi-ppt { background: rgba(247,194,111,0.15); }
-    .fi-zip { background: rgba(124,111,247,0.15); }
+    .fi-pdf  { background: rgba(239,68,68,0.15); }
+    .fi-doc  { background: rgba(59,130,246,0.15); }
+    .fi-ppt  { background: rgba(247,194,111,0.15); }
+    .fi-zip  { background: rgba(124,111,247,0.15); }
+    .fi-other{ background: rgba(100,100,100,0.15); }
 
     .card-badge {
       font-size: 0.7rem;
@@ -429,14 +427,11 @@
     }
     .card-stat { display: flex; align-items: center; gap: 3px; }
 
-    /* === UPLOAD CTA === */
     .upload-cta {
       position: relative;
       z-index: 1;
-      margin: 1rem 2rem 4rem;
+      margin: 1rem auto 4rem;
       max-width: 1100px;
-      margin-left: auto;
-      margin-right: auto;
       background: var(--surface);
       border: 1px dashed rgba(124,111,247,0.3);
       border-radius: var(--card-radius);
@@ -464,7 +459,6 @@
     }
     .upload-cta p { font-size: 0.875rem; color: var(--muted); }
 
-    /* === FOOTER === */
     footer {
       position: relative;
       z-index: 1;
@@ -475,7 +469,6 @@
       color: var(--muted);
     }
 
-    /* === ANIMATIONS === */
     .fade-in {
       opacity: 0;
       transform: translateY(20px);
@@ -501,14 +494,24 @@
 <nav>
   <div class="logo">Resource<span>Hub</span></div>
   <ul class="nav-links">
-    <li><a href="#">Browse</a></li>
-    <li><a href="#">Subjects</a></li>
-    <li><a href="#">Top Rated</a></li>
-    <li><a href="#">About</a></li>
+    <li><a href="pages/browse.php">Browse</a></li>
+    <li><a href="pages/browse.php?sort=rating">Top Rated</a></li>
+    <?php if (isset($_SESSION['user_id'])): ?>
+      <li><a href="pages/upload.php">Upload</a></li>
+      <li><a href="pages/logout.php">Log out</a></li>
+    <?php endif; ?>
   </ul>
   <div class="nav-btns">
-    <button class="btn-ghost" onclick="window.location='pages/login.php'">Log in</button>
-    <button class="btn-primary" onclick="window.location='pages/register.php'">Sign up</button>
+    <?php if (isset($_SESSION['user_id'])): ?>
+      <span style="font-size:0.85rem; color:var(--muted);">👋 <?= htmlspecialchars($_SESSION['user_name']) ?></span>
+      <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+        <button class="btn-ghost" onclick="window.location='pages/admin.php'">Admin</button>
+      <?php endif; ?>
+      <button class="btn-primary" onclick="window.location='pages/upload.php'">+ Upload</button>
+    <?php else: ?>
+      <button class="btn-ghost" onclick="window.location='pages/login.php'">Log in</button>
+      <button class="btn-primary" onclick="window.location='pages/register.php'">Sign up</button>
+    <?php endif; ?>
   </div>
 </nav>
 
@@ -538,18 +541,18 @@
   </div>
 </div>
 
-<!-- STATS -->
+<!-- STATS — real numbers from database -->
 <div class="stats">
   <div class="stat fade-in">
-    <div class="stat-num">1,<span>240</span></div>
+    <div class="stat-num"><span><?= number_format($total_resources) ?></span></div>
     <div class="stat-label">Resources shared</div>
   </div>
   <div class="stat fade-in">
-    <div class="stat-num"><span>380</span></div>
+    <div class="stat-num"><span><?= number_format($total_users) ?></span></div>
     <div class="stat-label">Active students</div>
   </div>
   <div class="stat fade-in">
-    <div class="stat-num"><span>42</span></div>
+    <div class="stat-num"><span><?= number_format($total_cats) ?></span></div>
     <div class="stat-label">Subjects covered</div>
   </div>
   <div class="stat fade-in">
@@ -562,29 +565,29 @@
 <section class="section">
   <div class="section-header">
     <h2 class="section-title">Browse by subject</h2>
-    <a href="browse.php" class="section-link">View all →</a>
+    <a href="pages/browse.php" class="section-link">View all →</a>
   </div>
   <div class="categories">
-    <a class="cat-chip active" href="#"><span class="cat-icon">💻</span> Web Technology <span class="cat-count">84</span></a>
-    <a class="cat-chip" href="#"><span class="cat-icon">🗄️</span> Databases <span class="cat-count">61</span></a>
-    <a class="cat-chip" href="#"><span class="cat-icon">🧮</span> Data Structures <span class="cat-count">55</span></a>
-    <a class="cat-chip" href="#"><span class="cat-icon">🔐</span> Cybersecurity <span class="cat-count">40</span></a>
-    <a class="cat-chip" href="#"><span class="cat-icon">📊</span> Statistics <span class="cat-count">37</span></a>
-    <a class="cat-chip" href="#"><span class="cat-icon">🤖</span> AI & ML <span class="cat-count">29</span></a>
-    <a class="cat-chip" href="#"><span class="cat-icon">📐</span> Maths <span class="cat-count">48</span></a>
-    <a class="cat-chip" href="#"><span class="cat-icon">🌐</span> Networking <span class="cat-count">33</span></a>
+    <a class="cat-chip active" href="pages/browse.php?category=1"><span class="cat-icon">💻</span> Web Technology</a>
+    <a class="cat-chip" href="pages/browse.php?category=2"><span class="cat-icon">🗄️</span> Databases</a>
+    <a class="cat-chip" href="pages/browse.php?category=3"><span class="cat-icon">🧮</span> Data Structures</a>
+    <a class="cat-chip" href="pages/browse.php?category=4"><span class="cat-icon">🔐</span> Cybersecurity</a>
+    <a class="cat-chip" href="pages/browse.php?category=5"><span class="cat-icon">📊</span> Statistics</a>
+    <a class="cat-chip" href="pages/browse.php?category=6"><span class="cat-icon">🤖</span> AI & ML</a>
+    <a class="cat-chip" href="pages/browse.php?category=7"><span class="cat-icon">📐</span> Maths</a>
+    <a class="cat-chip" href="pages/browse.php?category=8"><span class="cat-icon">🌐</span> Networking</a>
   </div>
 </section>
 
-<!-- RECENT RESOURCES -->
+<!-- RECENT RESOURCES — your original cards kept exactly -->
 <section class="section" style="padding-top:0;">
   <div class="section-header">
     <h2 class="section-title">Recently uploaded</h2>
-    <a href="browse.php" class="section-link">See all →</a>
+    <a href="pages/browse.php" class="section-link">See all →</a>
   </div>
   <div class="cards-grid">
 
-    <a class="resource-card fade-in" href="resource.php?id=1">
+    <a class="resource-card fade-in" href="pages/resource.php?id=1">
       <div class="card-top">
         <div class="file-icon fi-pdf">📄</div>
         <span class="card-badge new">New</span>
@@ -603,7 +606,7 @@
       </div>
     </a>
 
-    <a class="resource-card fade-in" href="resource.php?id=2">
+    <a class="resource-card fade-in" href="pages/resource.php?id=2">
       <div class="card-top">
         <div class="file-icon fi-doc">📝</div>
         <span class="card-badge">Notes</span>
@@ -622,7 +625,7 @@
       </div>
     </a>
 
-    <a class="resource-card fade-in" href="resource.php?id=3">
+    <a class="resource-card fade-in" href="pages/resource.php?id=3">
       <div class="card-top">
         <div class="file-icon fi-ppt">📊</div>
         <span class="card-badge">Slides</span>
@@ -641,7 +644,7 @@
       </div>
     </a>
 
-    <a class="resource-card fade-in" href="resource.php?id=4">
+    <a class="resource-card fade-in" href="pages/resource.php?id=4">
       <div class="card-top">
         <div class="file-icon fi-zip">📦</div>
         <span class="card-badge">Bundle</span>
@@ -660,7 +663,7 @@
       </div>
     </a>
 
-    <a class="resource-card fade-in" href="resource.php?id=5">
+    <a class="resource-card fade-in" href="pages/resource.php?id=5">
       <div class="card-top">
         <div class="file-icon fi-pdf">📄</div>
         <span class="card-badge new">New</span>
@@ -679,7 +682,7 @@
       </div>
     </a>
 
-    <a class="resource-card fade-in" href="resource.php?id=6">
+    <a class="resource-card fade-in" href="pages/resource.php?id=6">
       <div class="card-top">
         <div class="file-icon fi-doc">📝</div>
         <span class="card-badge">Notes</span>
@@ -704,7 +707,7 @@
 <!-- UPLOAD CTA -->
 <div class="upload-cta" onclick="window.location='pages/upload.php'">
   <div class="upload-icon">📤</div>
-  <h3>Share your notes with 380+ students</h3>
+  <h3>Share your notes with students</h3>
   <p>Upload your lecture notes, past papers or study guides — help your batchmates and earn ratings.</p>
   <br>
   <button class="btn-primary" style="padding: 0.7rem 1.8rem;">Start uploading →</button>
@@ -712,22 +715,20 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>Resource Hub &copy; 2026 · Built by IT Students, for IT Students · University of Colombo</p>
+  <p>Resource Hub &copy; 2026 · Built by IT Students, for IT Students · University of Moratuwa</p>
 </footer>
 
 <script>
   function doSearch() {
     const q = document.getElementById('searchInput').value.trim();
-    if (q) window.location = 'browse.php?q=' + encodeURIComponent(q);
+    if (q) window.location = 'pages/browse.php?q=' + encodeURIComponent(q);
   }
   document.getElementById('searchInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') doSearch();
   });
 
-  // Category chip toggle
   document.querySelectorAll('.cat-chip').forEach(chip => {
-    chip.addEventListener('click', function(e) {
-      e.preventDefault();
+    chip.addEventListener('click', function() {
       document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
       this.classList.add('active');
     });

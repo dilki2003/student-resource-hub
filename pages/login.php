@@ -19,7 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id']    = $user['id'];
             $_SESSION['user_name']  = $user['name'];
             $_SESSION['user_email'] = $user['email'];
-            header('Location: ../index.php');
+            $_SESSION['user_role']  = $user['role'];
+            if ($user['role'] === 'admin') {
+                header('Location: admin.php');
+            } else {
+                header('Location: ../index.php');
+            }
             exit;
         } else {
             $error = 'Invalid email or password. Please try again.';
@@ -335,7 +340,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const btn   = document.getElementById('toggleBtn');
     if (input.type === 'password') {
       input.type = 'text';
-      btn.textContent = '';
+      btn.textContent = '🙈';
     } else {
       input.type = 'password';
       btn.textContent = '👁️';

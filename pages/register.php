@@ -398,7 +398,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </main>
 
-<footer>Resource Hub &copy; 2026 · University of Colombo</footer>
+<footer>Resource Hub &copy; 2026 · University of Moratuwa</footer>
 
 <script>
   function togglePw(inputId, btnId) {

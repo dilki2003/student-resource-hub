@@ -572,7 +572,7 @@ $cats = $pdo->query("
   </main>
 </div>
 
-<footer>Resource Hub &copy; 2026 · University of Colombo · Admin Panel</footer>
+<footer>Resource Hub &copy; 2026 · University of Moratuwa · Admin Panel</footer>
 
 </body>
 </html>
