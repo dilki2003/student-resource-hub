@@ -517,7 +517,7 @@ $total_cats      = $pdo->query("SELECT COUNT(*) FROM categories")->fetchColumn()
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge fade-in">University of Colombo — IT Faculty</div>
+  <div class="hero-badge fade-in">University of Moratuwa— IT Faculty</div>
   <h1 class="fade-in">
     Find notes.<br>
     Share knowledge.<br>
