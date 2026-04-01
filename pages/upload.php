@@ -40,8 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (!in_array($ext, $allowed)) {
             $error = 'File type not allowed. Allowed: PDF, DOC, DOCX, PPT, PPTX, ZIP, RAR, TXT, PNG, JPG.';
         } else {
-            // Create uploads folder if it doesn't exist
-            $upload_dir = __DIR__ . '/uploads/';
+            // Save to ROOT uploads folder — always use absolute path
+            // __FILE__ = pages/upload.php
+            // dirname(dirname(__FILE__)) = project root
+            $upload_dir = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
             if (!is_dir($upload_dir)) mkdir($upload_dir, 0755, true);
 
             // Generate unique filename to avoid conflicts
@@ -345,7 +347,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!-- NAV -->
 <nav>
-  <a href="index.php" class="logo">Resource<span>Hub</span></a>
+  <a href='../index.php' class="logo">Resource<span>Hub</span></a>
   <div class="nav-right">
     <span style="font-size:0.85rem; color:var(--muted);">👋 <?= htmlspecialchars($_SESSION['user_name']) ?></span>
     <a href="browse.php" class="btn-ghost">Browse</a>
@@ -364,7 +366,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="alert error">⚠️ <?= htmlspecialchars($error) ?></div>
   <?php endif; ?>
 
-  <form method="POST" action="upload.php" enctype="multipart/form-data" id="uploadForm">
+  <form method="POST" action='upload.php' enctype="multipart/form-data" id="uploadForm">
     <div class="form-card">
 
       <!-- RESOURCE INFO -->
@@ -468,7 +470,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </form>
 </main>
 
-<footer>Resource Hub &copy; 2026 · University of Moratuwa</footer>
+<footer>Resource Hub &copy; 2026 · University of Colombo</footer>
 
 <script>
   const dropZone   = document.getElementById('dropZone');
